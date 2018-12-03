@@ -8,7 +8,7 @@ koa2 + mongodb
 
 恢复指定数据库: mongodump -h 127.0.0.1 -d test ./database/mongodb/blog-201811
 
-### 2：install
+### 2：安装依赖
 
 ```javascript
 
