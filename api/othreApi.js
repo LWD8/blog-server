@@ -48,6 +48,9 @@ exports.GET_ARTICLE_DETAILS = async(ctx, next) => {
   let _id = ctx.query.id
   try{
     const artDefails = await DB.artApi.findOne({_id})
+    // 阅读数
+    artDefails.meta.views++
+    await artDefails.save()
     ctx.body = reqObj(1, '列表数据获取成功', artDefails)
   }catch(err){
     ctx.body = reqObj(0, '列表数据获取失败')
@@ -94,6 +97,9 @@ exports.POST_ADD_COMMENT = async(ctx, next) => {
     }
     let comment = new DB.commentApi(data)
     await comment.save()
+    const artDefails = await DB.artApi.findOne({id: post_id})
+    artDefails.meta.comments++
+    await  artDefails.save()
     ctx.body = reqObj(1, '增加评论成功', comment)
   }catch(error){
     ctx.body = reqObj(0, '增加评论失败')

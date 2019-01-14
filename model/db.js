@@ -1,11 +1,12 @@
 const mongodb = require('./config')
 const Schema = mongodb.Schema
 const Promise = require('bluebird')
+const Moment = require('moment');
 
 // 文章列表
 let artItem = {
   content: String,
-  created_at: { type: Date, default: new Date() },
+  created_at: { type: Date, default: Moment().format('YYYY-MM-DD HH:mm:ss') },
   descript: String,
   id: Number,
   keyword: String,
@@ -20,7 +21,7 @@ let artItem = {
   thumb: String,
   title: String,
   type: { type: Number, default:1 },
-  update_at: { type: Date, default: new Date() }
+  update_at: { type: Date, default: Moment().format('YYYY-MM-DD HH:mm:ss') }
 }
 
 // 评论列表

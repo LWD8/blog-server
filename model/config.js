@@ -1,6 +1,6 @@
 'use strict'
 const db = require('mongoose');
-const DB_URL = 'mongodb://localhost:27017/blog-201811';
+const DB_URL = 'mongodb://127.0.0.1:27017/blog-201811';
 
 db.Promise = global.Promise;
 db.connect(DB_URL, {
