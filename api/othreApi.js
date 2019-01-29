@@ -70,6 +70,19 @@ exports.GET_LIKE_ARTICLE = async(ctx, next) => {
   }
 }
 
+// 删除文章
+exports.DELETE_ARTICLE = async (ctx, next) => {
+  let { id } = ctx.request.body
+  try{
+    console.log(id, 'id')
+    let data = await DB.artApi.remove({_id: id})
+    console.log(data, 'data')
+    ctx.body = reqObj(1, '删除文章成功',data)
+  }catch(err) {
+    ctx.body = reqObj(0, '删除文章失败')
+  }
+}
+
 // 增加评论
 exports.POST_ADD_COMMENT = async(ctx, next) => {
   let agent = ctx.request.header['user-agent']

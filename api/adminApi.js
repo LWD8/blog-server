@@ -48,12 +48,15 @@ exports.POST_ADMIN_LOGIN = async (ctx, next) => {
   }
 }
 
-// 增加文章
+// 增加/编辑文章
 exports.POST_ADD_ARTICLE = async (ctx, next) => {
   let data = ctx.request.body
   try{
-    const doc = await WellDB.artApi.findOne({id: data.id})
-    if(doc) {
+    let doc = {}
+    if (!data.isEdit) {
+      doc = await WellDB.artApi.findOne({id: data.id})
+    }
+    if(doc && !data.isEdit) {
       ctx.body = resObj(1, '文章ID已存在')
       return
     }
@@ -71,17 +74,21 @@ exports.POST_ADD_ARTICLE = async (ctx, next) => {
     delete newdata.comments
     delete newdata.likes
     delete newdata.views
-    const artData = new WellDB.artApi(newdata)
-    await new Promise((resolve, reject) => {
-      artData.save(err => {
-        if(err) {
-          ctx.body = resObj(1, '保存失败')
-          reject(err)
-        }
-        resolve()
+    if(!data.isEdit) {
+      const artData = new WellDB.artApi(newdata)
+      await new Promise((resolve, reject) => {
+        artData.save(err => {
+          if(err) {
+            ctx.body = resObj(1, '保存失败')
+            reject(err)
+          }
+          resolve()
+        })
       })
-    })
-    ctx.body = resObj(0, '文章保存成功')
+    } else {
+      const artUp = await WellDB.artApi.updateOne({_id: newdata._id},{$set:newdata})
+      ctx.body = resObj(0, '文章保存成功', artUp)
+    }
   }catch(err){
     ctx.body = resObj(1)
   }
