@@ -15,7 +15,7 @@ exports.GET_WALL_LIST = async(ctx, next) => {
   let skipNum = (current_page-1)*page_size
   try {
     const [ wall, total ] = await Promise.all([
-      DB.wallApi.find().skip(skipNum).limit(page_size),
+      DB.wallApi.find().skip(skipNum).limit(page_size).sort({"create_time":-1}),
       DB.wallApi.countDocuments()
     ])
     ctx.body = resObj(1, '列表数据获取成功', {

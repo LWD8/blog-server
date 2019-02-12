@@ -6,6 +6,7 @@ const Moment = require('moment');
 // 文章列表
 let artItem = {
   content: String,
+  create_at: { type: Date, default: Moment().format('YYYY-MM-DD HH:mm:ss') },
   created_at: { type: Date, default: Moment().format('YYYY-MM-DD HH:mm:ss') },
   descript: String,
   id: Number,

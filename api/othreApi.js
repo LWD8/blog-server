@@ -26,7 +26,7 @@ exports.GET_ARTICLE_LIST = async(ctx, next) => {
   if (!type) delete options.type
   try{
     const [artData, total] = await Promise.all([
-      DB.artApi.find(options).skip(skipNum).limit(page_size),
+      DB.artApi.find(options).skip(skipNum).limit(page_size).sort({"create_at":-1}),
       DB.artApi.countDocuments(options)
     ])
     ctx.body = reqObj(1, '列表数据获取成功', {
@@ -74,9 +74,7 @@ exports.GET_LIKE_ARTICLE = async(ctx, next) => {
 exports.DELETE_ARTICLE = async (ctx, next) => {
   let { id } = ctx.request.body
   try{
-    console.log(id, 'id')
     let data = await DB.artApi.remove({_id: id})
-    console.log(data, 'data')
     ctx.body = reqObj(1, '删除文章成功',data)
   }catch(err) {
     ctx.body = reqObj(0, '删除文章失败')

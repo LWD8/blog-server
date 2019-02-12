@@ -74,8 +74,9 @@ exports.POST_ADD_ARTICLE = async (ctx, next) => {
     delete newdata.comments
     delete newdata.likes
     delete newdata.views
+    let artData = null
     if(!data.isEdit) {
-      const artData = new WellDB.artApi(newdata)
+      artData = new WellDB.artApi(newdata)
       await new Promise((resolve, reject) => {
         artData.save(err => {
           if(err) {
@@ -86,9 +87,9 @@ exports.POST_ADD_ARTICLE = async (ctx, next) => {
         })
       })
     } else {
-      const artUp = await WellDB.artApi.updateOne({_id: newdata._id},{$set:newdata})
-      ctx.body = resObj(0, '文章保存成功', artUp)
+      artData = await WellDB.artApi.updateOne({_id: newdata._id},{$set:newdata})
     }
+    ctx.body = resObj(0, '文章保存成功', artData)
   }catch(err){
     ctx.body = resObj(1)
   }
@@ -98,7 +99,7 @@ exports.POST_ADD_ARTICLE = async (ctx, next) => {
 exports.GET_QINIU_TOKEN = async (ctx, next) => {
   try{
     let qdata = {
-      domain: 'http://pkh8zhjfc.bkt.clouddn.com/',
+      domain: 'http://pm30qeb0q.bkt.clouddn.com/',
       token: qiniuToken()
     }
     ctx.body = resObj(0, '获取七牛token', qdata)
